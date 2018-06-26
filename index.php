@@ -9,6 +9,11 @@ require_once '_app/Conn/Read.class.php';
 require_once '_app/Conn/Create.class.php';
 require 'vendor/autoload.php';
 
+/**
+ * Application Instance
+ */
+$app = new \Slim\App();
+
 /* Auth básica Http */
 $app->add(new \Slim\Middleware\HttpBasicAuthentication([
 
