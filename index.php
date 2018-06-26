@@ -158,7 +158,10 @@ $app->post('/user', function (Request $request, Response $response, array $args)
 });
 
 $app->get('/auth', function (Request $request, Response $response, array $args) use($app) {
-    return $response->withJson(["status" => "Autenticado!"], STATUS_OK)->withHeader("Content-type", "application/json");
+    require "TokenJWT.php";
+
+    $token = new TokenJWT('Paulo Henrique', 'paulogansobarman@gmail.com', 'key');
+    return $response->withJson(["status" => 1, "response" => "Autenticado!", "data" => ['access_token' => $token->getToken()]], STATUS_OK)->withHeader("Content-type", "application/json");
 });
 
 // $app->get('/token', function (Request $request, Response $response) use($app) {
