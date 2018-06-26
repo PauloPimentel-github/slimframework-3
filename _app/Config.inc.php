@@ -1,15 +1,15 @@
 <?php
 // CONFIGRAÇÕES DO BANCO EM AMBIENTE DE DESENVOLVIMENTO ####################
-define('HOST', 'localhost');
-define('USER', 'root');
-define('PASS', '');
-define('DBSA', 'u264360683_mcr');
-/*
+// define('HOST', 'localhost');
+// define('USER', 'root');
+// define('PASS', '');
+// define('DBSA', 'u264360683_mcr');
+
 // CONFIGRAÇÕES DO BANCO EM AMBIENTE DE PRODUÇÂO ####################
-define('HOST', 'j1r4n2ztuwm0bhh5.cbetxkdyhwsb.us-east-1.rds.amazonaws.com');
-define('USER', 'i3jpb3r4ggb8922a');
-define('PASS', 'x4cwuuwhzngy4okz');
-define('DBSA', 'sod4a2777opp9d11');*/
+define('HOST', 'jsftj8ez0cevjz8v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com');
+define('USER', 'vnr661jvepjrm43m');
+define('PASS', 'ls0fwsqzj328kom1');
+define('DBSA', 'pine2z3q1qdak8sh');
 
 //CONSTANTES DE STATUS HTTP
 
