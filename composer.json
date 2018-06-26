@@ -1,0 +1,10 @@
+{
+    "require": {
+        "slim/slim": "^3.0",
+        "tuupola/slim-basic-auth": "^2.3",
+        "firebase/php-jwt": "^5.0",
+        "tuupola/slim-jwt-auth": "^2.4",
+        "chadicus/slim-oauth2-middleware": "^3.3",
+        "chadicus/slim-oauth2-routes": "^3.1"
+    }
+}
