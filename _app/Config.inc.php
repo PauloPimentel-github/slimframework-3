@@ -52,24 +52,24 @@ define('ARRAY_ERRORS',
 'A versão HTTP usada na solicitação não é suportada pelo servidor.'
 ]);
 
-// AUTO LOAD DE CLASSES ####################
-function __autoload($Class) {
+// // AUTO LOAD DE CLASSES ####################
+// function __autoload($Class) {
 
-    $cDir = ['Conn', 'Helpers', 'Models'];
-    $iDir = null;
+//     $cDir = ['Conn', 'Helpers', 'Models'];
+//     $iDir = null;
 
-    foreach ($cDir as $dirName):
-        if (!$iDir && file_exists(__DIR__ . DIRECTORY_SEPARATOR . $dirName . DIRECTORY_SEPARATOR . $Class . '.class.php') && !is_dir(__DIR__ . DIRECTORY_SEPARATOR . $dirName . DIRECTORY_SEPARATOR . $Class . '.class.php')):
-            include_once (__DIR__ . DIRECTORY_SEPARATOR . $dirName . DIRECTORY_SEPARATOR . $Class . '.class.php');
-            $iDir = true;
-        endif;
-    endforeach;
+//     foreach ($cDir as $dirName):
+//         if (!$iDir && file_exists(__DIR__ . DIRECTORY_SEPARATOR . $dirName . DIRECTORY_SEPARATOR . $Class . '.class.php') && !is_dir(__DIR__ . DIRECTORY_SEPARATOR . $dirName . DIRECTORY_SEPARATOR . $Class . '.class.php')):
+//             include_once (__DIR__ . DIRECTORY_SEPARATOR . $dirName . DIRECTORY_SEPARATOR . $Class . '.class.php');
+//             $iDir = true;
+//         endif;
+//     endforeach;
 
-    if (!$iDir):
-        trigger_error("Não foi possível incluir {$Class}.class.php", E_USER_ERROR);
-        die;
-    endif;
-}
+//     if (!$iDir):
+//         trigger_error("Não foi possível incluir {$Class}.class.php", E_USER_ERROR);
+//         die;
+//     endif;
+// }
 
 //WSErro :: Exibe erros lançados :: Front
 function WSErro($ErrMsg, $ErrNo, $ErrDie = null) {

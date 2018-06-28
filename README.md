@@ -12,3 +12,9 @@
 
 # Endpoint 4: @POST - Cadastrar usuário: @params: Objeto User, atributos @string name, @int idade, @string cpf: https://webservice-slim.herokuapp.com/user
 #Retorna um json contendo o status, resposta e data com informações do objeto cadastrado na requisição
+
+# Endpoint 6: @POST - Buscar Token: @params: Objeto User, atributos @string name, @int idade, @string cpf: https://webservice-slim.herokuapp.com/user
+#Retorna um json contendo o status, resposta e data com informações do objeto cadastrado na requisição
+
+# Endpoint 4: @POST - Cadastrar usuário: @params: Objeto User, atributos @string name, @int idade, @string cpf: https://webservice-slim.herokuapp.com/user
+#Retorna um json contendo o status, resposta e data com informações do objeto cadastrado na requisição
