@@ -7,9 +7,9 @@ error_reporting(E_ALL);
 require_once('oauth2/src/OAuth2/Autoloader.php');
 OAuth2\Autoloader::register();
 
-$dsn = 'mysql:dbname=oauth2;host=localhost';
-$username = 'root';
-$password = '';
+$dsn = 'mysql:dbname=oauth2;host=jsftj8ez0cevjz8v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com';
+$username = 'vnr661jvepjrm43m';
+$password = 'ls0fwsqzj328kom1';
 
 $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $username, 'password' => $password));
 $server = new OAuth2\Server($storage);
