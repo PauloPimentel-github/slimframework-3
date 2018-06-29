@@ -13,8 +13,20 @@
 # Endpoint 4: @POST - Cadastrar usuário: @params: Objeto User, atributos @string name, @int idade, @string cpf: https://webservice-slim.herokuapp.com/user
 #Retorna um json contendo o status, resposta e data com informações do objeto cadastrado na requisição
 
-# Endpoint 6: @POST - Buscar Token: @params: Objeto User, atributos @string name, @int idade, @string cpf: https://webservice-slim.herokuapp.com/user
-#Retorna um json contendo o status, resposta e data com informações do objeto cadastrado na requisição
+# Endpoint 5: @POST - Buscar Token: Authorization, Basic Auth @parms: username=CLIENT_ID, password=CLIENT_SECRET Enviar via x-www-form-urlencode @param grant_type=client_credentials, https://webservice-slim.herokuapp.com/oauth2/token
 
-# Endpoint 4: @POST - Cadastrar usuário: @params: Objeto User, atributos @string name, @int idade, @string cpf: https://webservice-slim.herokuapp.com/user
-#Retorna um json contendo o status, resposta e data com informações do objeto cadastrado na requisição
+#Retorna um json no formato: 
+{
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpZCI6IjAzYjgzOTQ4ZWIxZjhkZDhlN2E5MGQ0NmQzMDI3NDA3MzAzOWM1NjgiLCJqdGkiOiIwM2I4Mzk0OGViMWY4ZGQ4ZTdhOTBkNDZkMzAyNzQwNzMwMzljNTY4IiwiaXNzIjoiIiwiYXVkIjoiQ0xJRU5UX0lEIiwic3ViIjpudWxsLCJleHAiOjE1MzAyMzQxNTUsImlhdCI6MTUzMDIzMDU1NSwidG9rZW5fdHlwZSI6ImJlYXJlciIsInNjb3BlIjpudWxsfQ.jrYevkfIGP2jOrRTKbLptstpyALQes1W_rQmW0_4xmv35d13VMtKIApWETL9yNJecm-wNdmvV1YhFd8SefoDwrrJl05-3hmViRJWQRKC1mTOzqPD_u8luFUKYSFpCY_UCbxsm3iC4hWJVcoVXHHpTNYd18BW8QNLstskGE8K3BA",
+    "expires_in": 3600,
+    "token_type": "bearer",
+    "scope": null
+}
+
+# Endpoint 6: @GET - Validar Token: Authorization, Bearer {token}, https://https://webservice-slim.herokuapp.com/oauth2/teste-token
+#Retorna um json no formato:
+{
+    "status": 1,
+    "response": "Autenticado, token válido recurso aceito para consumo da api",
+    "data": []
+}
