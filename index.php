@@ -11,18 +11,15 @@ OAuth2\Autoloader::register();
 // $username = 'root';
 // $password = '';
 
+// $dsn = 'mysql:dbname=pine2z3q1qdak8sh;host=jsftj8ez0cevjz8v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com';
+// $username = 'vnr661jvepjrm43m';
+// $password = 'ls0fwsqzj328kom1';
 
-$dsn = 'mysql:dbname=pine2z3q1qdak8sh;host=jsftj8ez0cevjz8v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com';
-$username = 'vnr661jvepjrm43m';
-$password = 'ls0fwsqzj328kom1';
-
-
-$storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $username, 'password' => $password));
-$server = new OAuth2\Server($storage);
+// $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $username, 'password' => $password));
+// $server = new OAuth2\Server($storage);
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use Firebase\JWT\JWT;
 
 require_once '_app/Config.inc.php';
 require_once '_app/Conn/Conn.class.php';
@@ -31,58 +28,68 @@ require_once '_app/Conn/Create.class.php';
 require 'vendor/autoload.php';
 
 /**
- * Application Instance
- */
+* Application Instance
+*/
 $app = new \Slim\App();
 
-/* Auth básica Http */
-$app->add(new \Slim\Middleware\HttpBasicAuthentication([
-
-    /* Usuários existentes */
-    "users" => ["root" => "toor"],
-
-    /* Blacklist - Deixa todas liberadas e só protege as dentro do array */
-    "path" => ["/auth"],
-
-    /** Whitelist - Protege todas as rotas e só libera as de dentro do array */
-    //"passthrough" => ["/auth/liberada", "/admin/ping"],
-]));
-
+/**
+* Path para requisição de um token válido
+*/
 $app->post('/oauth2/token', function (Request $request, Response $response, array $args) use($app) {
+    // Create the keypair
+    //$publicKey = file_get_contents("oauth2/keys/pubkey.pem");
+    //$privateKey = file_get_contents("oauth2/keys/privkey.pem");
+    $publicKey = '';
+    $privateKey = '';
+    $read = new Read;
+    $read->exeRead('oauth_public_keys', "WHERE client_id = :cli_id", "cli_id=ClientID_One");
 
-    // your public key strings can be passed in however you like
-    $publicKey  = file_get_contents('oauth2/test/config/keys/id_rsa.pub');
-    $privateKey = file_get_contents('oauth2/test/config/keys/id_rsa');
+    $data = ($read->getResult()[0] == null ? null : $read->getResult()[0]);
+    //client_id
+    $clientId = $data['client_id'];
+    //client client_secret
+    $clientSecret = $data['client_secret'];
+    //public key
+    $publicKey = $data['public_key'];
+    //private key
+    $privateKey = $data['private_key'];
 
-    // create storage
+    // create storage in memory
     $storage = new OAuth2\Storage\Memory(array(
         'keys' => array(
             'public_key'  => $publicKey,
             'private_key' => $privateKey,
         ),
-        // add a Client ID for testing
+        //add a Client for testing
         'client_credentials' => array(
-            'CLIENT_ID' => array('client_secret' => 'CLIENT_SECRET')
-        ),
+            $clientId => array('client_secret' => $clientSecret)
+        )
     ));
-
+    // config storage in server
     $server = new OAuth2\Server($storage, array(
         'use_jwt_access_tokens' => true,
     ));
 
+    // config credential in server
     $server->addGrantType(new OAuth2\GrantType\ClientCredentials($storage)); // minimum config
 
-    // send the response
-    $token = $server->handleTokenRequest(OAuth2\Request::createFromGlobals())->send();
-
-    return $response->withHeader('Content-type', 'application/json')->withJson($token, STATUS_OK);
-
+    // send the response;
+    return $response->withHeader('Content-type', 'application/json')
+    ->withJson($server->handleTokenRequest(OAuth2\Request::createFromGlobals())->send(), STATUS_OK);
 });
 
+/**
+* Path para validação de um token
+*/
 $app->get('/oauth2/teste-token', function (Request $request, Response $response, array $args) use($app) {
 
     /* for a Resource Server (minimum config) */
-    $publicKey = file_get_contents('oauth2/test/config/keys/id_rsa.pub');
+    $publicKey = '';
+    $read = new Read;
+    $read->exeRead('oauth_public_keys', "WHERE client_id = :cli_id", "cli_id=ClientID_One");
+
+    $data = ($read->getResult()[0] == null ? null : $read->getResult()[0]);
+    $publicKey = $data['public_key'];
 
     // no private key necessary
     $keyStorage = new OAuth2\Storage\Memory(array('keys' => array(
@@ -107,12 +114,16 @@ $app->get('/oauth2/teste-token', function (Request $request, Response $response,
     } else {
         $json = array(
             'status' => 1,
-            'response' => 'Autenticado, token válido recurso aceito para consumo da api',
+            'response' => 'Autenticado, token válido!!!',
             'data' => []
         );
 
         return $response->withHeader('Content-type', 'application/json')->withJson($json, STATUS_OK);
     }
+});
+
+$app->post('/oauth2/token-keys', function (Request $request, Response $response, array $args) use($app) {
+
 });
 
 /**
@@ -244,29 +255,5 @@ $app->post('/user', function (Request $request, Response $response, array $args)
         }
     }
 });
-
-$app->get('/auth', function (Request $request, Response $response, array $args) use($app) {
-    require "TokenJWT.php";
-
-    $token = new TokenJWT('Paulo Henrique', 'paulogansobarman@gmail.com', 'key');
-    return $response->withJson(["status" => 1, "response" => "Autenticado!", "data" => ['access_token' => $token->getToken()]], STATUS_OK)->withHeader("Content-type", "application/json");
-});
-
-// $app->get('/token', function (Request $request, Response $response) use($app) {
-//     require "TokenJWT.php";
-//
-//     $token = new TokenJWT('Paulo Henrique', 'paulogansobarman@gmail.com', 'key');
-//     $received_token = $token->getToken();
-//
-//     if ($received_token === 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJ1c2VyX25hbWUiOiJQYXVsbyBIZW5yaXF1ZSIsInVzZXJfZW1haWwiOiJwYXVsb2dhbnNvYmFybWFuQGdtYWlsLmNvbSJ9.nVhXFGRQTmH+Ablxpbi3HIvTJqML800eZlu9xed/0o8=') {
-//         $jsonJWT = array('status' => 1, 'response' => 'Token válido', 'access_token' => $token->getToken());
-//     } else {
-//         $jsonJWT = array('status' => 0, 'response' => 'Token inválido suma daqui!', 'access_token' => []);
-//     }
-//
-//     return $response->withHeader("Content-type","application/json")
-//                     ->withAddedHeader("Authorization", "Bearer 123")
-//                     ->withJson($jsonJWT, STATUS_OK);
-// });
 
 $app->run();
