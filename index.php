@@ -27,6 +27,7 @@ require_once '_app/Conn/Read.class.php';
 require_once '_app/Conn/Create.class.php';
 require 'vendor/autoload.php';
 
+
 /**
 * Application Instance
 */
@@ -54,17 +55,26 @@ $app->post('/oauth2/token', function (Request $request, Response $response, arra
     //private key
     $privateKey = $data['private_key'];
 
+    $supportedScopes = array(
+      'basic',
+      'admin',
+      'super'
+    );
+
     // create storage in memory
     $storage = new OAuth2\Storage\Memory(array(
+        'default_scope' => $supportedScopes,
         'keys' => array(
             'public_key'  => $publicKey,
             'private_key' => $privateKey,
+            'encryption_algorithm'  => 'HS256', // "RS256" is the default
         ),
         //add a Client for testing
         'client_credentials' => array(
-            $clientId => array('client_secret' => $clientSecret)
+            $clientId => array('client_secret' => $clientSecret),
         )
     ));
+
     // config storage in server
     $server = new OAuth2\Server($storage, array(
         'use_jwt_access_tokens' => true,
